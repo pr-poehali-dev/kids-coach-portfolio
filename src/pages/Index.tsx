@@ -4,11 +4,28 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [isVisible, setIsVisible] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<any>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -28,21 +45,51 @@ const Index = () => {
       age: '5-8 лет',
       description: 'Развитие координации, гибкости и силы через увлекательные упражнения',
       icon: 'Smile',
-      color: 'bg-primary'
+      color: 'bg-primary',
+      fullDescription: 'Программа спортивной гимнастики разработана специально для детей 5-8 лет. Включает базовые упражнения на развитие гибкости, координации движений и силовых показателей.',
+      benefits: [
+        'Улучшение координации и баланса',
+        'Развитие гибкости суставов',
+        'Укрепление мышечного корсета',
+        'Формирование правильной осанки'
+      ],
+      schedule: 'Понедельник, Среда 16:00-17:00',
+      duration: '60 минут',
+      groupSize: 'До 10 детей'
     },
     {
       title: 'Игровые тренировки',
       age: '6-10 лет',
       description: 'Командные игры для развития коммуникации и спортивного духа',
       icon: 'Users',
-      color: 'bg-secondary'
+      color: 'bg-secondary',
+      fullDescription: 'Тренировки в игровом формате помогают детям развивать командный дух, учиться взаимодействовать со сверстниками и получать удовольствие от движения.',
+      benefits: [
+        'Развитие коммуникативных навыков',
+        'Формирование командного духа',
+        'Повышение выносливости',
+        'Социализация через игру'
+      ],
+      schedule: 'Суббота 10:00-11:00',
+      duration: '60 минут',
+      groupSize: 'До 15 детей'
     },
     {
       title: 'Индивидуальные занятия',
       age: '4-12 лет',
       description: 'Персональный подход к каждому ребёнку с учётом особенностей',
       icon: 'Target',
-      color: 'bg-primary'
+      color: 'bg-primary',
+      fullDescription: 'Индивидуальные занятия позволяют максимально учесть особенности развития ребёнка и работать над конкретными целями в комфортном темпе.',
+      benefits: [
+        'Персональная программа тренировок',
+        'Гибкий график занятий',
+        'Максимальное внимание тренера',
+        'Быстрое достижение результатов'
+      ],
+      schedule: 'Пятница 16:00-17:00 (по записи)',
+      duration: '45-60 минут',
+      groupSize: '1 ребёнок'
     }
   ];
 
@@ -62,6 +109,33 @@ const Index = () => {
     { year: '2023', title: 'Методист года', description: 'Премия лучшего детского тренера' },
   ];
 
+  const testimonials = [
+    {
+      name: 'Анна Петрова',
+      role: 'Мама Даши, 7 лет',
+      text: 'Дочка ходит на тренировки уже полгода и в восторге! Стала более уверенной в себе, улучшилась осанка. Тренер находит подход к каждому ребёнку.',
+      rating: 5
+    },
+    {
+      name: 'Михаил Соколов',
+      role: 'Папа Артёма, 6 лет',
+      text: 'Сын раньше был очень застенчивым, а теперь легко идёт на контакт с другими детьми. Спасибо за игровой формат тренировок!',
+      rating: 5
+    },
+    {
+      name: 'Елена Морозова',
+      role: 'Мама Максима, 8 лет',
+      text: 'Отличный тренер! Индивидуальный подход, профессионализм и искренняя любовь к детям. Максим с нетерпением ждёт каждого занятия.',
+      rating: 5
+    },
+    {
+      name: 'Дмитрий Волков',
+      role: 'Папа Софии, 5 лет',
+      text: 'София стала намного более активной и координированной. Программа тренировок продумана до мелочей. Рекомендую!',
+      rating: 5
+    }
+  ];
+
   const gallery = [
     'https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/21d20902-30fe-46a2-958a-58c34f18fde7.jpg',
     'https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/3303ccd6-dd69-4099-822d-bcef54cc51cf.jpg',
@@ -71,14 +145,19 @@ const Index = () => {
     'https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/aba32b03-3c71-45b1-a9ec-fa6cb748b0f2.jpg',
   ];
 
+  const handleProgramClick = (program: any) => {
+    setSelectedProgram(program);
+    setIsDialogOpen(true);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-muted">
-      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 shadow-sm">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
+      <nav className="fixed top-0 w-full bg-card/80 backdrop-blur-md z-50 border-b border-border">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-primary">ДетСпорт</h1>
             <div className="hidden md:flex gap-6">
-              {['home', 'about', 'programs', 'gallery', 'schedule', 'contacts'].map((section) => (
+              {['home', 'about', 'programs', 'testimonials', 'gallery', 'schedule', 'contacts'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -89,6 +168,7 @@ const Index = () => {
                   {section === 'home' && 'Главная'}
                   {section === 'about' && 'Обо мне'}
                   {section === 'programs' && 'Программы'}
+                  {section === 'testimonials' && 'Отзывы'}
                   {section === 'gallery' && 'Галерея'}
                   {section === 'schedule' && 'Расписание'}
                   {section === 'contacts' && 'Контакты'}
@@ -150,7 +230,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="about" className="py-20 bg-white">
+      <section id="about" className="py-20 bg-card">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in">
             <Badge className="mb-4">Обо мне</Badge>
@@ -262,6 +342,7 @@ const Index = () => {
                 key={index}
                 className="hover-lift cursor-pointer group animate-fade-in-up"
                 style={{ animationDelay: `${index * 100}ms` }}
+                onClick={() => handleProgramClick(program)}
               >
                 <CardContent className="p-8">
                   <div className={`w-16 h-16 ${program.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
@@ -281,7 +362,55 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="gallery" className="py-20 bg-white">
+      <section id="testimonials" className="py-20 bg-card">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16 animate-fade-in">
+            <Badge className="mb-4">Отзывы</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Что говорят родители
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Честные отзывы о занятиях от родителей наших маленьких спортсменов
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <Carousel className="w-full">
+              <CarouselContent>
+                {testimonials.map((testimonial, index) => (
+                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/2">
+                    <Card className="h-full hover-lift">
+                      <CardContent className="p-8">
+                        <div className="flex gap-1 mb-4">
+                          {[...Array(testimonial.rating)].map((_, i) => (
+                            <Icon key={i} name="Star" size={20} className="text-primary fill-primary" />
+                          ))}
+                        </div>
+                        <p className="text-muted-foreground mb-6 italic">"{testimonial.text}"</p>
+                        <div className="flex items-center gap-4">
+                          <Avatar className="w-12 h-12">
+                            <AvatarFallback className="bg-primary text-white">
+                              {testimonial.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <div className="font-semibold">{testimonial.name}</div>
+                            <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in">
             <Badge className="mb-4">Галерея</Badge>
@@ -316,7 +445,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="schedule" className="py-20 bg-muted/50">
+      <section id="schedule" className="py-20 bg-card">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in">
             <Badge className="mb-4">Расписание</Badge>
@@ -335,7 +464,7 @@ const Index = () => {
                   <div
                     key={index}
                     className={`p-6 flex items-center justify-between hover:bg-muted/50 transition-colors ${
-                      index !== schedule.length - 1 ? 'border-b' : ''
+                      index !== schedule.length - 1 ? 'border-b border-border' : ''
                     }`}
                   >
                     <div className="flex items-center gap-6">
@@ -363,7 +492,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="contacts" className="py-20 bg-white">
+      <section id="contacts" className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in">
             <Badge className="mb-4">Контакты</Badge>
@@ -458,19 +587,107 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="bg-foreground text-white py-12">
+      <footer className="bg-card border-t border-border py-12">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h3 className="text-2xl font-bold mb-4">ДетСпорт</h3>
-            <p className="text-white/70 mb-6">
+            <p className="text-muted-foreground mb-6">
               Создаём здоровое и счастливое будущее для ваших детей
             </p>
-            <div className="text-white/50 text-sm">
+            <div className="text-muted-foreground text-sm">
               © 2024 ДетСпорт. Все права защищены.
             </div>
           </div>
         </div>
       </footer>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          {selectedProgram && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-bold flex items-center gap-4">
+                  <div className={`w-14 h-14 ${selectedProgram.color} rounded-2xl flex items-center justify-center`}>
+                    <Icon name={selectedProgram.icon} size={28} className="text-white" />
+                  </div>
+                  {selectedProgram.title}
+                </DialogTitle>
+                <DialogDescription className="text-base pt-4">
+                  {selectedProgram.fullDescription}
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-6 mt-6">
+                <div>
+                  <h4 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                    <Icon name="CheckCircle" size={20} className="text-primary" />
+                    Преимущества программы
+                  </h4>
+                  <ul className="space-y-2">
+                    {selectedProgram.benefits.map((benefit: string, index: number) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <Icon name="Check" size={18} className="text-primary mt-1 flex-shrink-0" />
+                        <span className="text-muted-foreground">{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-4 pt-4">
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-3">
+                        <Icon name="Calendar" size={20} className="text-primary" />
+                        <div>
+                          <div className="text-sm text-muted-foreground">Расписание</div>
+                          <div className="font-semibold text-sm">{selectedProgram.schedule}</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-3">
+                        <Icon name="Clock" size={20} className="text-primary" />
+                        <div>
+                          <div className="text-sm text-muted-foreground">Длительность</div>
+                          <div className="font-semibold text-sm">{selectedProgram.duration}</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-3">
+                        <Icon name="Users" size={20} className="text-primary" />
+                        <div>
+                          <div className="text-sm text-muted-foreground">Группа</div>
+                          <div className="font-semibold text-sm">{selectedProgram.groupSize}</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <Button className="flex-1" onClick={() => {
+                    setIsDialogOpen(false);
+                    scrollToSection('contacts');
+                  }}>
+                    <Icon name="Phone" size={18} className="mr-2" />
+                    Записаться на занятие
+                  </Button>
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Закрыть
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
