@@ -1,12 +1,476 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import Icon from '@/components/ui/icon';
 
 const Index = () => {
+  const [activeSection, setActiveSection] = useState('home');
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection(id);
+    }
+  };
+
+  const programs = [
+    {
+      title: 'Спортивная гимнастика',
+      age: '5-8 лет',
+      description: 'Развитие координации, гибкости и силы через увлекательные упражнения',
+      icon: 'Smile',
+      color: 'bg-primary'
+    },
+    {
+      title: 'Игровые тренировки',
+      age: '6-10 лет',
+      description: 'Командные игры для развития коммуникации и спортивного духа',
+      icon: 'Users',
+      color: 'bg-secondary'
+    },
+    {
+      title: 'Индивидуальные занятия',
+      age: '4-12 лет',
+      description: 'Персональный подход к каждому ребёнку с учётом особенностей',
+      icon: 'Target',
+      color: 'bg-primary'
+    }
+  ];
+
+  const schedule = [
+    { day: 'Понедельник', time: '16:00 - 17:00', group: 'Младшая группа (5-7 лет)' },
+    { day: 'Понедельник', time: '17:30 - 18:30', group: 'Старшая группа (8-10 лет)' },
+    { day: 'Среда', time: '16:00 - 17:00', group: 'Младшая группа (5-7 лет)' },
+    { day: 'Среда', time: '17:30 - 18:30', group: 'Старшая группа (8-10 лет)' },
+    { day: 'Пятница', time: '16:00 - 17:00', group: 'Индивидуальные занятия' },
+    { day: 'Суббота', time: '10:00 - 11:00', group: 'Игровые тренировки' },
+  ];
+
+  const achievements = [
+    { year: '2020', title: 'Сертификат детского тренера', description: 'Российская академия спорта' },
+    { year: '2021', title: '50+ довольных учеников', description: 'Успешные выпуски групп' },
+    { year: '2022', title: 'Победы на соревнованиях', description: '15 призовых мест воспитанников' },
+    { year: '2023', title: 'Методист года', description: 'Премия лучшего детского тренера' },
+  ];
+
+  const gallery = [
+    'https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/21d20902-30fe-46a2-958a-58c34f18fde7.jpg',
+    'https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/3303ccd6-dd69-4099-822d-bcef54cc51cf.jpg',
+    'https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/aba32b03-3c71-45b1-a9ec-fa6cb748b0f2.jpg',
+    'https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/21d20902-30fe-46a2-958a-58c34f18fde7.jpg',
+    'https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/3303ccd6-dd69-4099-822d-bcef54cc51cf.jpg',
+    'https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/aba32b03-3c71-45b1-a9ec-fa6cb748b0f2.jpg',
+  ];
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-white to-muted">
+      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-primary">ДетСпорт</h1>
+            <div className="hidden md:flex gap-6">
+              {['home', 'about', 'programs', 'gallery', 'schedule', 'contacts'].map((section) => (
+                <button
+                  key={section}
+                  onClick={() => scrollToSection(section)}
+                  className={`transition-colors hover:text-primary ${
+                    activeSection === section ? 'text-primary font-semibold' : 'text-foreground'
+                  }`}
+                >
+                  {section === 'home' && 'Главная'}
+                  {section === 'about' && 'Обо мне'}
+                  {section === 'programs' && 'Программы'}
+                  {section === 'gallery' && 'Галерея'}
+                  {section === 'schedule' && 'Расписание'}
+                  {section === 'contacts' && 'Контакты'}
+                </button>
+              ))}
+            </div>
+            <Button size="sm" className="md:hidden">
+              <Icon name="Menu" size={20} />
+            </Button>
+          </div>
+        </div>
+      </nav>
+
+      <section id="home" className="min-h-screen flex items-center pt-20">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className={`space-y-6 ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}>
+              <Badge className="bg-secondary text-white">Детский тренер</Badge>
+              <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+                Спорт для детей —{' '}
+                <span className="text-primary">это весело!</span>
+              </h1>
+              <p className="text-xl text-muted-foreground">
+                Развиваем физические способности и уверенность в себе через игру и движение. 
+                Каждый ребёнок — маленький чемпион!
+              </p>
+              <div className="flex gap-4">
+                <Button size="lg" onClick={() => scrollToSection('contacts')} className="hover-scale">
+                  <Icon name="Phone" size={20} className="mr-2" />
+                  Записаться на пробное занятие
+                </Button>
+                <Button size="lg" variant="outline" onClick={() => scrollToSection('programs')} className="hover-scale">
+                  Программы
+                </Button>
+              </div>
+              <div className="flex gap-8 pt-4">
+                <div>
+                  <div className="text-4xl font-bold text-primary">150+</div>
+                  <div className="text-muted-foreground">Учеников</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-primary">5+</div>
+                  <div className="text-muted-foreground">Лет опыта</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-primary">20+</div>
+                  <div className="text-muted-foreground">Наград</div>
+                </div>
+              </div>
+            </div>
+            <div className={`${isVisible ? 'animate-scale-in' : 'opacity-0'} delay-200`}>
+              <img
+                src="https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/21d20902-30fe-46a2-958a-58c34f18fde7.jpg"
+                alt="Детский тренер"
+                className="rounded-3xl shadow-2xl hover-lift"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16 animate-fade-in">
+            <Badge className="mb-4">Обо мне</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Создаю радость движения
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Я — детский тренер с многолетним опытом работы. Моя миссия — помочь каждому ребёнку 
+              полюбить спорт и открыть свои таланты.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+            <div className="space-y-6">
+              <h3 className="text-3xl font-bold">Мой подход</h3>
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Icon name="Heart" size={24} className="text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">Индивидуальный подход</h4>
+                    <p className="text-muted-foreground">
+                      Учитываю особенности каждого ребёнка, его темп развития и интересы
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
+                    <Icon name="Sparkles" size={24} className="text-secondary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">Игровой формат</h4>
+                    <p className="text-muted-foreground">
+                      Тренировки проходят в форме увлекательных игр и квестов
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Icon name="Trophy" size={24} className="text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">Достижение результатов</h4>
+                    <p className="text-muted-foreground">
+                      Развиваем не только тело, но и характер, уверенность в себе
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <img
+                src="https://cdn.poehali.dev/projects/477eef15-b0ab-4b5c-b48b-1c69e722a6bb/files/3303ccd6-dd69-4099-822d-bcef54cc51cf.jpg"
+                alt="Тренировка"
+                className="rounded-3xl shadow-xl hover-lift"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-8">
+            <h3 className="text-3xl font-bold text-center mb-12">Мой путь</h3>
+            <div className="relative">
+              <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-primary to-secondary"></div>
+              {achievements.map((achievement, index) => (
+                <div
+                  key={index}
+                  className={`mb-12 flex items-center ${
+                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                  } flex-col`}
+                >
+                  <div className={`md:w-5/12 ${index % 2 === 0 ? 'md:text-right md:pr-12' : 'md:pl-12'}`}>
+                    <Card className="hover-lift animate-fade-in">
+                      <CardContent className="p-6">
+                        <div className="text-2xl font-bold text-primary mb-2">{achievement.year}</div>
+                        <h4 className="text-xl font-semibold mb-2">{achievement.title}</h4>
+                        <p className="text-muted-foreground">{achievement.description}</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                  <div className="md:w-2/12 flex justify-center my-4 md:my-0">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-lg z-10 animate-bounce-in">
+                      <Icon name="Award" size={32} className="text-white" />
+                    </div>
+                  </div>
+                  <div className="md:w-5/12"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="programs" className="py-20 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16 animate-fade-in">
+            <Badge className="mb-4">Программы</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Тренировки для всех возрастов
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Разработанные программы с учётом возрастных особенностей и физического развития детей
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {programs.map((program, index) => (
+              <Card
+                key={index}
+                className="hover-lift cursor-pointer group animate-fade-in-up"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <CardContent className="p-8">
+                  <div className={`w-16 h-16 ${program.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                    <Icon name={program.icon as any} size={32} className="text-white" />
+                  </div>
+                  <Badge variant="outline" className="mb-4">{program.age}</Badge>
+                  <h3 className="text-2xl font-bold mb-3">{program.title}</h3>
+                  <p className="text-muted-foreground mb-6">{program.description}</p>
+                  <Button variant="ghost" className="group-hover:text-primary transition-colors">
+                    Подробнее
+                    <Icon name="ArrowRight" size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16 animate-fade-in">
+            <Badge className="mb-4">Галерея</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Наши тренировки
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Фотографии с занятий — радость, энергия и достижения наших маленьких спортсменов
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {gallery.map((image, index) => (
+              <div
+                key={index}
+                className="relative overflow-hidden rounded-2xl group cursor-pointer animate-scale-in"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <img
+                  src={image}
+                  alt={`Галерея ${index + 1}`}
+                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                  <div className="text-white">
+                    <Icon name="ZoomIn" size={24} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="schedule" className="py-20 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16 animate-fade-in">
+            <Badge className="mb-4">Расписание</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Занятия на неделе
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Выберите удобное время для занятий. Запись открыта!
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <Card className="animate-fade-in-up">
+              <CardContent className="p-0">
+                {schedule.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`p-6 flex items-center justify-between hover:bg-muted/50 transition-colors ${
+                      index !== schedule.length - 1 ? 'border-b' : ''
+                    }`}
+                  >
+                    <div className="flex items-center gap-6">
+                      <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Icon name="Calendar" size={24} className="text-primary" />
+                      </div>
+                      <div>
+                        <div className="font-semibold text-lg">{item.day}</div>
+                        <div className="text-muted-foreground">{item.time}</div>
+                      </div>
+                    </div>
+                    <Badge variant="secondary" className="hidden md:inline-flex">{item.group}</Badge>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <div className="mt-8 text-center">
+              <Button size="lg" onClick={() => scrollToSection('contacts')} className="hover-scale">
+                <Icon name="Clock" size={20} className="mr-2" />
+                Записаться на занятие
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contacts" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16 animate-fade-in">
+            <Badge className="mb-4">Контакты</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Свяжитесь со мной
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Ответю на все вопросы и помогу выбрать подходящую программу для вашего ребёнка
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12">
+            <div className="space-y-6 animate-fade-in-up">
+              <h3 className="text-2xl font-bold mb-6">Контактная информация</h3>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Icon name="Phone" size={24} className="text-primary" />
+                </div>
+                <div>
+                  <div className="font-semibold">Телефон</div>
+                  <a href="tel:+79991234567" className="text-muted-foreground hover:text-primary transition-colors">
+                    +7 (999) 123-45-67
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Icon name="Mail" size={24} className="text-secondary" />
+                </div>
+                <div>
+                  <div className="font-semibold">Email</div>
+                  <a href="mailto:trainer@example.com" className="text-muted-foreground hover:text-primary transition-colors">
+                    trainer@example.com
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Icon name="MapPin" size={24} className="text-primary" />
+                </div>
+                <div>
+                  <div className="font-semibold">Адрес</div>
+                  <div className="text-muted-foreground">
+                    г. Москва, ул. Спортивная, д. 10
+                  </div>
+                </div>
+              </div>
+              <div className="pt-6">
+                <div className="font-semibold mb-3">Социальные сети</div>
+                <div className="flex gap-3">
+                  <Button size="icon" variant="outline" className="hover-scale">
+                    <Icon name="Instagram" size={20} />
+                  </Button>
+                  <Button size="icon" variant="outline" className="hover-scale">
+                    <Icon name="Facebook" size={20} />
+                  </Button>
+                  <Button size="icon" variant="outline" className="hover-scale">
+                    <Icon name="Youtube" size={20} />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <Card className="animate-fade-in-up">
+              <CardContent className="p-6">
+                <h3 className="text-2xl font-bold mb-6">Оставьте заявку</h3>
+                <form className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Ваше имя</label>
+                    <Input placeholder="Введите ваше имя" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Телефон</label>
+                    <Input type="tel" placeholder="+7 (999) 123-45-67" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Email</label>
+                    <Input type="email" placeholder="your@email.com" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Сообщение</label>
+                    <Textarea placeholder="Расскажите о вашем ребёнке и целях занятий" rows={4} />
+                  </div>
+                  <Button type="submit" className="w-full hover-scale">
+                    <Icon name="Send" size={20} className="mr-2" />
+                    Отправить заявку
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      <footer className="bg-foreground text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold mb-4">ДетСпорт</h3>
+            <p className="text-white/70 mb-6">
+              Создаём здоровое и счастливое будущее для ваших детей
+            </p>
+            <div className="text-white/50 text-sm">
+              © 2024 ДетСпорт. Все права защищены.
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
